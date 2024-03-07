@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Anthony Giuliano">
+    <title>Niner Coffee House</title>
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+</head>
+<body>
+    <header>
+        <h1>Niner Coffee House</h1>
+
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="menu.html">Menu</a></li>
+                <li><a href="reservations.html">Reservations</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <img src="images/shop.jpg" height="533" width="400" alt="Coffee">
+
+        <h2>Make a Reservation</h2>
+
+        <form action="#">
+            
+            <input type="text" id="name" name="name" placeholder="Name" required>
+            <br>
+            <input type="email" id="email" name="email" placeholder="Email" required>
+            <br>
+            <input type="tel" name="telephone" id="telephone" placeholder="Phone number" required>
+            <br>
+            <input type="number" name="guests" id="guests" min="1" max="20" placeholder="Number of guests in your party" required>
+            <br>
+            <input type="datetime-local" name="date" id="date" required>
+            <br>
+            <textarea name="specialrequests" id="specialrequests" cols="20" rows="2" placeholder="Special requests"></textarea>
+            <br>
+            <input type="submit" value="Reserve">
+
+        </form>
+    </main>
+
+    <footer>
+        <p><small>©2022 Niner Coffee House. All rights reserved</small></p>
+    </footer>
+
+</body>
+</html>
