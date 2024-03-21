@@ -43,10 +43,14 @@ header h1 {
     position: absolute;
     top: 0;
     right: 0;
+
+    transition: 300ms opacity ease-in-out;
+    transition-delay: 300ms;
 }
 
 .carousel-item.active {
     opacity: 1;
+    transition-delay: 0ms;
 }
 
 .carousel-item > img {
@@ -101,6 +105,7 @@ header h1 {
     border-radius: 50%;
 
     opacity: 0.3;
+    transition: 300ms opacity ease-in-out;
 }
 
 .nav-item.active{
