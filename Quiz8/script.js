@@ -1,10 +1,14 @@
 window.addEventListener("load", chainPromises);
 
-  function chainPromises() {
-    func1()
-      .then(func2)
-      .then(func3)
-      .catch(err=>console.log(err.message));
+  async function chainPromises() {
+    try {
+      await func1();
+      await func2();
+      await func3();
+    }
+    catch(err) {
+      console.log(err.message);
+    }
   }
 
   function func1() {
