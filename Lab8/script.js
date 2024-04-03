@@ -5,6 +5,19 @@
 const icedButton = document.querySelector('button:nth-child(1)');
 const hotButton = document.querySelector('button:nth-child(2)');
 
+async function getCoffeeData(coffeeType) {
+    try {
+        const response = await fetch(coffeeType);
+        if (!response.ok) {
+            throw new Error('Could not fetch data.');
+        }
+        const data = await response.json();
+        addDrinks(data);
+    } catch (error) {
+        console.error('Could not find coffee data.', error);
+    }
+}
+
 // function for adding drinks to page
 function addDrinks(drinks) {
     const container = document.querySelector('.container');
@@ -55,21 +68,11 @@ function addDrinks(drinks) {
 
 // iced coffee button
 icedButton.addEventListener('click', function() {
-    fetch('data/iced.json')
-    .then(response => response.json())
-    .then(data => {
-        addDrinks(data);
-    })
-    .catch(error => console.error('Error fetching iced coffee data', error));
+    getCoffeeData('data/iced.json');
 });
 
 // hot coffee button
 hotButton.addEventListener('click', function() {
-    fetch('data/hot.json')
-    .then(response => response.json())
-    .then(data => {
-        addDrinks(data);
-    })
-    .catch(error => console.error('Error fetching hot coffee data', error));
+    getCoffeeData('data/hot.json');
 });
 
