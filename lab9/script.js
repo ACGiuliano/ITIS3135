@@ -48,13 +48,19 @@ function initGame() {
     questions = [];
     url = base_url;
 
-    /*  Write down your code here to update the URL according to selected category,
-        hide the category card and show the skeleton card.
+    const selectedCat = categoryElements.find(item=>item.classList.contains('selected'));
+    if (!selectedCat) {
+        alert('Please pick a category');
+        return;
+    }
 
-        Then call the getQuestions function to move on
+    const catId = selectedCat.getAttribute('data-category');
+    url = `${base_url}&category=${catId}`;
 
-        If the user doesn't select any category, show an alert to choose a category    
-    */
+    categoryCard.classList.add('hidden');
+    skeletonCard.classList.remove('hidden');
+
+    getQuestions();
 }
 
 async function getQuestions() {
@@ -64,11 +70,8 @@ async function getQuestions() {
             throw Error(`Error: ${response.url} ${response.statusText}`);
         const data = await response.json();
         if(data.response_code === 0){
-            /*
-                Write your code here to process the data and then show the questions.
-
-                Hint: you can call the other functions to do that
-            */
+            processQuestions(data.results);
+            showQuestions();
         }
         else{
             throw Error('Error: Cannot fetch questions from the API');
@@ -79,16 +82,18 @@ async function getQuestions() {
 }
 
 function processQuestions(data) {
-    /*
-        Write your code here to process the json data to populate the global variable "questions" so that
-        it contains the necessary information such as, the question itself, difficulty level, answers, correct answers.
+    questions = data.map(q => {
+        const answers = [...q.incorrect_answers, q.correct_answer];
+        answers.sort(()=>Math.random()-0.5);
+        const corrAnsIndex = answers.indexOf(q.correct_answer);
 
-        Hint: Create a question object and populate its properties (text, level, answers, correctAnswer) and then just push that object to the global variable
-        "questions"
-
-        Make sure to add the correct answer to the choices at random location so that it is not always the same index
-        for the right answer.
-    */
+        return {
+            text: q.question,
+            level: q.difficulty,
+            answers: answers,
+            correctAnswerIndex: corrAnsIndex
+        };
+    });
 }
 
 function showQuestions() {
@@ -130,17 +135,39 @@ function submitAnswer() {
     submitBtn.disabled = true;
     const answerSubmitted = questionBody.querySelector('.selected');
     const allAnswers = questionBody.querySelectorAll('.option-item');
-    const correctAnswer = allAnswers[questions[counter].correctAnswer];
+    const correctAnswer = questions[counter].correctAnswerIndex;
+    const correctText = allAnswers[correctAnswer].textContent;
+    const pickedAnswer = answerSubmitted.textContent;
 
-    correctAnswer.classList.add('correct');
+    allAnswers[correctAnswer].classList.add('correct');
 
 
-    /*
-        Write your code here to check if the user submitted any answer or not. Verify the user's submitted answer and if it is correct, update necessary
-        variables. If incorrect, add 'wrong' class to the class list of 'answerSubmitted' 
+    if(!answerSubmitted){
+        nextQuestion();
+        return;
+    }
 
-        Also, set a timeout for 1.5s and call the nextQuestion() function
-    */
+    if (pickedAnswer === correctText) {
+        switch (questions[counter].level.toLowerCase()) {
+            case 'easy':
+                score += 10;
+                break;
+            case 'medium':
+                score += 20;
+                break;
+            case 'hard':
+                score += 30;
+                break;
+            default:
+                break;
+        }
+        correct++;
+    }
+    else {
+        answerSubmitted.classList.add('wrong');
+    }
+
+    setTimeout(nextQuestion, 1500);
 }
 
 function nextQuestion() {
@@ -162,8 +189,9 @@ function showScore() {
 
 playAgainBtn.addEventListener('click', ()=>{
 
-    /*
-        Write your code here to implement the Play Again button
-    */
+    categoryCard.classList.remove('hidden');
+    scoreCard.classList.add('hidden');
+
+    initGame();
 
 });
